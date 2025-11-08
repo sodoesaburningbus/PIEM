@@ -1,4 +1,4 @@
-# Python Iowa Enviornmental Mesonet
+# Python Iowa Environmental Mesonet
 
 This package is a simple wrapper for the Iowa Environmental Mesonet api.
 It has no relationship to Iowa State University and is not maintained by anyone affiliated with the IEM.
