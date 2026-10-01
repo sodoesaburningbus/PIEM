@@ -15,7 +15,7 @@ import numpy as np
 ###   start_date, datetime object, UTC, the earliest date in the download.
 ###   end_date, datetime object, UTC, the latest date in the download. Defaults to the start date.
 ###   station, optional string, name of the station to download. If blank, downloads all.
-###   special, optional boolean (False), whether to download special METAR observations as well.
+###   report_type, optional integer (default 1), 1=5-minutely obs, 3=regular obs, 4=special obs
 ###   Flags for which variables to include default to False except, temperature, dewpoint, wind dir., wind speed, and MSLP.
 ###     I consider these the bare minimum for a station plot.
 ###     Setting all=True will download all variables regardless of individual flags.
@@ -28,15 +28,15 @@ class api:
 
     ### The initialization function
     ### This creates the API call and pulls the data
-    def __init__(self, start_date, end_date=None, tmpf=True, dwpf=True, drct=True, sknt=True, mslp=True, ave_wind_speed_kts=False, ave_wind_drct=False,
+    def __init__(self, start_date, end_date=None, tmpc=True, dwpc=True, tmpf=False, dwpf=False, drct=True, sknt=True, mslp=True, ave_wind_speed_kts=False, ave_wind_drct=False,
                  relh=False, p01i=False, alti=False, vsby=False, gust=False, skyc1=False, skyc2=False, skyc3=False, skyc4=False,
                  skyl1=False, skyl2=False, skyl3=False, skyl4=False, wxcodes=False, ice_accretion_1hr=False,
                  ice_accretion_3hr=False, ice_accretion_6hr=False, peak_wind_gust=False, peak_wind_drct=False,
-                 peak_wind_time=False, feel=False, metar=False, snowdepth=False, special=False, all=False, station=None):
+                 peak_wind_time=False, feel=False, metar=False, snowdepth=False, all=False, station=None, report_type=3):
 
         # List of valid names for the variables
         args = locals()
-        valid_names = ['tmpf', 'dwpf', 'drct', 'sknt', 'mslp', 'relh', 'p01i', 'alti', 'vsby', 'gust', 'skyc1', 'skyc2', 'skyc3', 'skyc4', 'skyl1', 'skyl2',
+        valid_names = ['tmpc', 'dwpc', 'tmpf', 'dwpf', 'drct', 'sknt', 'mslp', 'relh', 'p01i', 'alti', 'vsby', 'gust', 'skyc1', 'skyc2', 'skyc3', 'skyc4', 'skyl1', 'skyl2',
                        'skyl3', 'skyl4', 'wxcodes', 'ice_accretion_1hr', 'ice_accretion_3hr', 'ice_accretion_6hr', 'peak_wind_gust', 'peak_wind_drct',
                        'peak_wind_time', 'feel', 'metar', 'snowdepth', 'ave_wind_speed_kts', 'ave_wind_drct']
         
@@ -51,17 +51,17 @@ class api:
         else:
             station_str = f'&station={station}'
 
-        if (special):
-            report_type='3&report_type=4'
-        else:
-            report_type='3'
+        #if (special):
+        #    report_type='3&report_type=4'
+        #else:
+        #    report_type='3'
 
         if (end_date == None):
             end_date = start_date
 
         # Build the URL for the api call
         self.api_call = f'https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py?&data={data_flags}&year1={start_date.year}&month1={start_date.month}&day1={start_date.day}\
-            &year2={end_date.year}&month2={end_date.month}&day2={end_date.day}&tz=UTC&format=onlycomma&latlon=yes&elev=yes&missing=M&direct=no&report_type={report_type}'\
+            &year2={end_date.year}&month2={end_date.month}&day2={end_date.day}&tz=UTC&format=onlycomma&latlon=yes&elev=yes&missing=M&network=IA_ASOS&direct=no&report_type={report_type}'\
             +station_str
         self.api_call = self.api_call.replace('[','').replace(']', '').replace(' ','').replace("'","")
 
