@@ -191,7 +191,7 @@ https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py?
 - Missing values (`'M'`) are automatically replaced with `NaN`.
 - The class attempts to cast all numerical fields to `float` where possible.
 - Default download includes essential meteorological parameters (temperature, dewpoint, wind direction, wind speed, and MSLP).
-
+- The default settings retrieve hourly ASOS observations. This is to avoid the lack of temperature data in the high frequency data stream. More details are at https://mesonet.agron.iastate.edu/onsite/news.phtml?id=1290.
 ---
 
 ## License
